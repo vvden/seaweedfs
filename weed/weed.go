@@ -18,8 +18,7 @@ import (
 
 	"github.com/chrislusf/seaweedfs/weed/command"
 	"github.com/chrislusf/seaweedfs/weed/glog"
-
-	"github.com/vvden/seaweedfs/seaweedfs/weed/stats"
+	"github.com/chrislusf/seaweedfs/weed/stats"
 
 	"net/http"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
