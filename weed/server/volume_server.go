@@ -1,12 +1,12 @@
 package weed_server
 
 import (
-	"fmt"
+	// "fmt"
 	"net/http"
 
 	"google.golang.org/grpc"
 
-	"github.com/chrislusf/seaweedfs/weed/stats"
+	// "github.com/chrislusf/seaweedfs/weed/stats"
 	"github.com/chrislusf/seaweedfs/weed/util"
 
 	"github.com/chrislusf/seaweedfs/weed/glog"
@@ -90,11 +90,11 @@ func NewVolumeServer(adminMux, publicMux *http.ServeMux, ip string,
 	}
 
 	go vs.heartbeat()
-	hostAddress := fmt.Sprintf("%s:%d", ip, port)
-	go stats.LoopPushingMetric("volumeServer", hostAddress, stats.VolumeServerGather,
-		func() (addr string, intervalSeconds int) {
-			return vs.MetricsAddress, vs.MetricsIntervalSec
-		})
+	// hostAddress := fmt.Sprintf("%s:%d", ip, port)
+	// go stats.LoopPushingMetric("volumeServer", hostAddress, stats.VolumeServerGather,
+	// 	func() (addr string, intervalSeconds int) {
+	// 		return vs.MetricsAddress, vs.MetricsIntervalSec
+	// 	})
 
 	return vs
 }

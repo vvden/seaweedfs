@@ -18,6 +18,12 @@ import (
 
 	"github.com/chrislusf/seaweedfs/weed/command"
 	"github.com/chrislusf/seaweedfs/weed/glog"
+
+	"github.com/vvden/seaweedfs/seaweedfs/weed/stats"
+
+	"net/http"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 )
 
 var IsDebug *bool
@@ -36,6 +42,9 @@ func setExitStatus(n int) {
 }
 
 func main() {
+
+
+
 	glog.MaxSize = 1024 * 1024 * 32
 	rand.Seed(time.Now().UnixNano())
 	flag.Usage = usage
@@ -44,6 +53,19 @@ func main() {
 	args := flag.Args()
 	if len(args) < 1 {
 		usage()
+	}
+	http.Handle("/metrics", promhttp.HandlerFor(stats.VolumeServerGather, promhttp.HandlerOpts{}))
+	//
+	// if args[0] == "master" {
+	// 	go func() {
+	// 		http.ListenAndServe(":2113", nil)
+	// 	}()
+	// }
+
+	if args[0] == "volume" {
+		go func() {
+			http.ListenAndServe(":2114", nil)
+		}()
 	}
 
 	if args[0] == "help" {
@@ -77,6 +99,8 @@ func main() {
 	fmt.Fprintf(os.Stderr, "weed: unknown subcommand %q\nRun 'weed help' for usage.\n", args[0])
 	setExitStatus(2)
 	exit()
+
+
 }
 
 var usageTemplate = `

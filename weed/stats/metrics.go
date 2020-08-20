@@ -3,13 +3,13 @@ package stats
 import (
 	"fmt"
 	"os"
-	"strings"
-	"time"
+	// "strings"
+	// "time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/push"
+	// "github.com/prometheus/client_golang/prometheus/push"
 
-	"github.com/chrislusf/seaweedfs/weed/glog"
+	// "github.com/chrislusf/seaweedfs/weed/glog"
 )
 
 var (
@@ -83,6 +83,9 @@ var (
 			Help:      "Maximum number of volumes.",
 		})
 
+
+
+
 	VolumeServerDiskSizeGauge = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Namespace: "SeaweedFS",
@@ -105,38 +108,37 @@ func init() {
 	VolumeServerGather.MustRegister(VolumeServerVolumeCounter)
 	VolumeServerGather.MustRegister(VolumeServerMaxVolumeCounter)
 	VolumeServerGather.MustRegister(VolumeServerDiskSizeGauge)
-
 }
 
-func LoopPushingMetric(name, instance string, gatherer *prometheus.Registry, fnGetMetricsDest func() (addr string, intervalSeconds int)) {
-
-	if fnGetMetricsDest == nil {
-		return
-	}
-
-	addr, intervalSeconds := fnGetMetricsDest()
-	pusher := push.New(addr, name).Gatherer(gatherer).Grouping("instance", instance)
-	currentAddr := addr
-
-	for {
-		if currentAddr != "" {
-			err := pusher.Push()
-			if err != nil && !strings.HasPrefix(err.Error(), "unexpected status code 200") {
-				glog.V(0).Infof("could not push metrics to prometheus push gateway %s: %v", addr, err)
-			}
-		}
-		if intervalSeconds <= 0 {
-			intervalSeconds = 15
-		}
-		time.Sleep(time.Duration(intervalSeconds) * time.Second)
-		addr, intervalSeconds = fnGetMetricsDest()
-		if currentAddr != addr {
-			pusher = push.New(addr, name).Gatherer(gatherer).Grouping("instance", instance)
-			currentAddr = addr
-		}
-
-	}
-}
+// func LoopPushingMetric(name, instance string, gatherer *prometheus.Registry, fnGetMetricsDest func() (addr string, intervalSeconds int)) {
+//
+// 	if fnGetMetricsDest == nil {
+// 		return
+// 	}
+//
+// 	addr, intervalSeconds := fnGetMetricsDest()
+// 	pusher := push.New(addr, name).Gatherer(gatherer).Grouping("instance", instance)
+// 	currentAddr := addr
+//
+// 	for {
+// 		if currentAddr != "" {
+// 			err := pusher.Push()
+// 			if err != nil && !strings.HasPrefix(err.Error(), "unexpected status code 200") {
+// 				glog.V(0).Infof("could not push metrics to prometheus push gateway %s: %v", addr, err)
+// 			}
+// 		}
+// 		if intervalSeconds <= 0 {
+// 			intervalSeconds = 15
+// 		}
+// 		time.Sleep(time.Duration(intervalSeconds) * time.Second)
+// 		addr, intervalSeconds = fnGetMetricsDest()
+// 		if currentAddr != addr {
+// 			pusher = push.New(addr, name).Gatherer(gatherer).Grouping("instance", instance)
+// 			currentAddr = addr
+// 		}
+//
+// 	}
+// }
 
 func SourceName(port uint32) string {
 	hostname, err := os.Hostname()

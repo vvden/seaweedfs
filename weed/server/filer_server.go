@@ -15,7 +15,7 @@ import (
 	"github.com/chrislusf/seaweedfs/weed/operation"
 	"github.com/chrislusf/seaweedfs/weed/pb"
 	"github.com/chrislusf/seaweedfs/weed/pb/master_pb"
-	"github.com/chrislusf/seaweedfs/weed/stats"
+	// "github.com/chrislusf/seaweedfs/weed/stats"
 	"github.com/chrislusf/seaweedfs/weed/util"
 
 	"github.com/chrislusf/seaweedfs/weed/filer2"
@@ -156,10 +156,10 @@ func maybeStartMetrics(fs *FilerServer, option *FilerOption) {
 	if metricsAddress == "" && metricsIntervalSec <= 0 {
 		return
 	}
-	go stats.LoopPushingMetric("filer", stats.SourceName(option.Port), stats.FilerGather,
-		func() (addr string, intervalSeconds int) {
-			return metricsAddress, metricsIntervalSec
-		})
+	// go stats.LoopPushingMetric("filer", stats.SourceName(option.Port), stats.FilerGather,
+	// 	func() (addr string, intervalSeconds int) {
+	// 		return metricsAddress, metricsIntervalSec
+	// 	})
 }
 
 func readFilerConfiguration(grpcDialOption grpc.DialOption, masterAddress string) (metricsAddress string, metricsIntervalSec int, err error) {
